@@ -27,18 +27,13 @@ const TemplateCreator = ({ park }) => {
           </div>
           {/* Right Section */}
           <div className="md:w-1/2 md:pl-6 mt-6 md:mt-0">
-            <img
-              src={park.imageUrl}
-              alt={park.name}
-              className="rounded-lg w-full h-72 object-cover"
-            />
+            <img src={park.imageUrl} alt={park.name} className="rounded-lg w-full h-72 object-cover" />
             <div className="mt-6">
               <h3 className="text-lg font-semibold text-gray-800">Review</h3>
               <ul className="list-none space-y-3">
                 {park.reviews.map((review, index) => (
                   <li key={index} className="text-gray-600">
-                    <strong className="text-gray-800">{review.name}:</strong>{' '}
-                    {review.text}
+                    <strong className="text-gray-800">{review.name}:</strong> {review.text}
                   </li>
                 ))}
               </ul>
@@ -50,4 +45,4 @@ const TemplateCreator = ({ park }) => {
   );
 };
 
-export  default TemplateCreator;
+export default TemplateCreator;
