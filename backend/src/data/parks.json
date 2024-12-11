@@ -1,0 +1,225 @@
+{
+    "parks": [{
+            "name": "Taman Menteng",
+            "location": "Menteng, Jakarta Pusat",
+            "openhours": "06:00 - 18:00",
+            "facilities": [
+                "Jogging Track",
+                "Playground",
+                "Gazebo",
+                "Area Hijau",
+                "Tempat Duduk"
+            ],
+            "description": "Taman hijau di pusat kota Jakarta dengan suasana tenang dan nyaman",
+            "coordinates": "-6.2088,106.8456"
+        },
+        {
+            "name": "Taman Suropati",
+            "location": "Menteng, Jakarta Pusat",
+            "openhours": "24 Jam",
+            "facilities": [
+                "Area Bersejarah",
+                "Spot Foto",
+                "Area Duduk",
+                "Patung",
+                "Area Musik"
+            ],
+            "description": "Taman bersejarah dengan arsitektur klasik dan suasana romantis",
+            "coordinates": "-6.2095,106.8341"
+        },
+        {
+            "name": "Taman Mini Indonesia Indah",
+            "location": "Cipayung, Jakarta Timur",
+            "openhours": "08:00 - 17:00",
+            "facilities": [
+                "Museum",
+                "Kebun Binatang",
+                "Teater",
+                "Area Budaya",
+                "Danau"
+            ],
+            "description": "Taman wisata budaya terbesar di Indonesia dengan miniatur berbagai provinsi",
+            "coordinates": "-6.3028,106.8526"
+        },
+        {
+            "name": "Taman Impian Jaya Ancol",
+            "location": "Ancol, Jakarta Utara",
+            "openhours": "08:00 - 22:00",
+            "facilities": [
+                "Pantai",
+                "Waterpark",
+                "Taman Hiburan",
+                "Restoran",
+                "Hotel",
+                "Kolam Renang"
+            ],
+            "description": "Kawasan wisata terbesar di Jakarta dengan berbagai fasilitas hiburan",
+            "coordinates": "-6.1239,106.8510"
+        },
+        {
+            "name": "Lapangan Banteng",
+            "location": "Gambir, Jakarta Pusat",
+            "openhours": "24 Jam",
+            "facilities": [
+                "Area Olahraga",
+                "Monumen",
+                "Area Berkumpul",
+                "Tempat Duduk"
+            ],
+            "description": "Ruang terbuka hijau bersejarah di pusat kota Jakarta",
+            "coordinates": "-6.1753,106.8336"
+        },
+        {
+            "name": "Taman Semanggi",
+            "location": "Setiabudi, Jakarta Selatan",
+            "openhours": "06:00 - 19:00",
+            "facilities": [
+                "Area Bermain",
+                "Jogging Track",
+                "Area Hijau",
+                "Tempat Duduk",
+                "Air Mancur"
+            ],
+            "description": "Taman dengan arsitektur unik berbentuk daun semanggi",
+            "coordinates": "-6.2240,106.8310"
+        },
+        {
+            "name": "Taman Tebet",
+            "location": "Tebet, Jakarta Selatan",
+            "openhours": "06:00 - 19:00",
+            "facilities": [
+                "Jogging Track",
+                "Area Fitness",
+                "Playground",
+                "Tempat Duduk",
+                "Area Hijau"
+            ],
+            "description": "Taman hijau yang nyaman untuk berolahraga dan bersantai",
+            "coordinates": "-6.2260,106.8520"
+        },
+        {
+            "name": "Taman Waduk Pluit",
+            "location": "Penjaringan, Jakarta Utara",
+            "openhours": "06:00 - 18:00",
+            "facilities": [
+                "Area Memancing",
+                "Jogging Track",
+                "Tempat Duduk",
+                "Area Hijau",
+                "Spot Foto"
+            ],
+            "description": "Taman di sekitar waduk dengan pemandangan air yang menenangkan",
+            "coordinates": "-6.1260,106.7850"
+        },
+        {
+            "name": "Taman BMW",
+            "location": "Kebayoran Baru, Jakarta Selatan",
+            "openhours": "05:00 - 20:00",
+            "facilities": [
+                "Area Fitness",
+                "Jogging Track",
+                "Area Bermain Anak",
+                "Tempat Duduk",
+                "Area Hijau"
+            ],
+            "description": "Taman modern dengan fasilitas olahraga lengkap",
+            "coordinates": "-6.2420,106.8050"
+        },
+        {
+            "name": "Taman Cattleya",
+            "location": "Kelapa Gading, Jakarta Utara",
+            "openhours": "06:00 - 20:00",
+            "facilities": [
+                "Area Fitness",
+                "Jogging Track",
+                "Playground",
+                "Tempat Duduk",
+                "Area Hijau"
+            ],
+            "description": "Taman modern di kawasan perumahan dengan fasilitas lengkap",
+            "coordinates": "-6.1550,106.9110"
+        },
+        {
+            "name": "Taman Lalu Lintas",
+            "location": "Kelapa Gading, Jakarta Utara",
+            "openhours": "08:00 - 17:00",
+            "facilities": [
+                "Edukasi Lalu Lintas",
+                "Playground",
+                "Museum Mini",
+                "Area Bermain",
+                "Tempat Duduk"
+            ],
+            "description": "Taman edukasi lalu lintas untuk anak-anak dan masyarakat",
+            "coordinates": "-6.1620,106.9050"
+        },
+        {
+            "name": "Taman Pemuda Pratama",
+            "location": "Rawamangun, Jakarta Timur",
+            "openhours": "06:00 - 18:00",
+            "facilities": [
+                "Lapangan Olahraga",
+                "Area Fitness",
+                "Jogging Track",
+                "Area Bermain",
+                "Tempat Duduk"
+            ],
+            "description": "Taman modern dengan fasilitas olahraga lengkap untuk masyarakat",
+            "coordinates": "-6.1870,106.8726"
+        },
+        {
+            "name": "Taman Kota Pluit",
+            "location": "Penjaringan, Jakarta Utara",
+            "openhours": "05:00 - 20:00",
+            "facilities": [
+                "Area Bermain Anak",
+                "Jogging Track",
+                "Tempat Duduk",
+                "Area Hijau",
+                "Kolam Ikan"
+            ],
+            "description": "Taman hijau yang nyaman untuk keluarga di kawasan Pluit",
+            "coordinates": "-6.1220,106.7894"
+        },
+        {
+            "name": "Taman Ayodya",
+            "location": "Pasar Minggu, Jakarta Selatan",
+            "openhours": "06:00 - 19:00",
+            "facilities": [
+                "Area Bermain",
+                "Tempat Duduk",
+                "Toilet Umum", "Jogging Track",
+                "Area Hijau"
+            ],
+            "description": "Taman yang asri dengan fasilitas untuk keluarga dan anak-anak",
+            "coordinates": "-6.2900,106.8230"
+        },
+        {
+            "name": "Taman Menteng Park",
+            "location": "Menteng, Jakarta Pusat",
+            "openhours": "06:00 - 18:00",
+            "facilities": [
+                "Jogging Track",
+                "Playground",
+                "Gazebo",
+                "Area Hijau",
+                "Tempat Duduk"
+            ],
+            "description": "Taman yang luas dengan banyak area hijau dan fasilitas untuk bersantai",
+            "coordinates": "-6.2080,106.8450"
+        },
+        {
+            "name": "Taman Sari",
+            "location": "Taman Sari, Jakarta Barat",
+            "openhours": "06:00 - 18:00",
+            "facilities": [
+                "Area Olahraga",
+                "Tempat Duduk",
+                "Area Hijau",
+                "Spot Foto"
+            ],
+            "description": "Taman yang nyaman untuk berolahraga dan bersantai di Jakarta Barat",
+            "coordinates": "-6.1500,106.7850"
+        }
+    ]
+}
