@@ -5,7 +5,23 @@ export const getParkList = async() => {
         console.log('Fetching parks from:', api.defaults.baseURL);
         const response = await api.get('/parks');
         console.log('Response:', response);
-        return response.data.data; // Sesuaikan dengan struktur response backend
+        
+        if (response.data.status === 'success' && Array.isArray(response.data.data)) {
+            // Transform the data to ensure all fields are properly formatted
+            const parks = response.data.data.map(park => ({
+                ...park,
+                facilities: typeof park.facilities === 'string' 
+                    ? JSON.parse(park.facilities) 
+                    : park.facilities || [],
+                // Ensure imageUrl is a valid URL
+                imageUrl: park.imageUrl && park.imageUrl.startsWith('http') 
+                    ? park.imageUrl 
+                    : null
+            }));
+            return parks;
+        } else {
+            throw new Error('Invalid response format from server');
+        }
     } catch (error) {
         console.error('Error fetching parks:', error);
         throw error;
@@ -15,7 +31,21 @@ export const getParkList = async() => {
 export const getParkById = async(id) => {
     try {
         const response = await api.get(`/parks/${id}`);
-        return response.data.data;
+        if (response.data.status === 'success' && response.data.data) {
+            const park = response.data.data;
+            return {
+                ...park,
+                facilities: typeof park.facilities === 'string' 
+                    ? JSON.parse(park.facilities) 
+                    : park.facilities || [],
+                // Ensure imageUrl is a valid URL
+                imageUrl: park.imageUrl && park.imageUrl.startsWith('http') 
+                    ? park.imageUrl 
+                    : null
+            };
+        } else {
+            throw new Error('Failed to fetch park details');
+        }
     } catch (error) {
         console.error('Error fetching park details:', error);
         throw error;
@@ -44,7 +74,11 @@ export const createPark = async(parkData) => {
         const response = await api.post('/parks', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
-        return response.data;
+        if (response.data.status === 'success') {
+            return response.data;
+        } else {
+            throw new Error('Failed to create park');
+        }
     } catch (error) {
         console.error('Park creation error:', error);
         throw error;
