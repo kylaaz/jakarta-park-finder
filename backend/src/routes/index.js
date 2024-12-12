@@ -3,7 +3,6 @@ import authRoutes from './authRoutes.js';
 import parkRoutes from './parkRoutes.js';
 import damagedParkRoutes from './damagedParkRoutes.js';
 import repairedParkRoutes from './repairedParkRoutes.js';
-import seedRoutes from './seedRoutes.js';
 
 const router = express.Router();
 
@@ -12,7 +11,7 @@ router.use('/auth', authRoutes);
 router.use('/parks', parkRoutes); // This will handle both park and review routes
 router.use('/damaged-parks', damagedParkRoutes);
 router.use('/repaired-parks', repairedParkRoutes);
-router.use('/seed', seedRoutes);
+
 // Remove the separate reviews route since it's now part of parks
 // router.use('/reviews', reviewRoutes);
 
