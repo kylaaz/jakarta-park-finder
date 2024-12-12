@@ -1,7 +1,7 @@
 function Login({ setSelectedTab }) {
   return (
     <>
-      <h3 class="text-lg font-bold">Login</h3>
+      <h3 className="text-lg font-bold">Login</h3>
 
       <form className="mt-2 flex flex-col gap-2">
         <label className="form-control">
@@ -24,7 +24,7 @@ function Login({ setSelectedTab }) {
       </form>
 
       <p className="mt-4">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <button
           type="button"
           onClick={() => setSelectedTab('register')}

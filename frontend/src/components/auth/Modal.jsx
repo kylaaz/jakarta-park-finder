@@ -13,14 +13,14 @@ function Modal() {
 
   return (
     <>
-      <button className="btn" onClick={openModal}>
-        Login
+      <button className="btn rounded-full px-8" onClick={openModal}>
+        Sign In
       </button>
 
       <dialog ref={modalRef} className="modal overflow-y-auto">
-        <div class="modal-box max-h-max max-w-lg">
+        <div className="modal-box max-h-max max-w-lg">
           <form method="dialog">
-            <button class="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
+            <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
           </form>
 
           {selectedTab === 'login' && <Login setSelectedTab={setSelectedTab} />}

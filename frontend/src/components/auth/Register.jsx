@@ -1,7 +1,7 @@
 function Register({ setSelectedTab }) {
   return (
     <>
-      <h3 class="text-lg font-bold">Register</h3>
+      <h3 className="text-lg font-bold">Register</h3>
 
       <form className="mt-2 flex flex-col gap-2">
         <label className="form-control">
