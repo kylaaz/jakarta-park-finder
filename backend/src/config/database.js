@@ -1,38 +1,37 @@
 import mysql from 'mysql2/promise';
-import { parkSeeder } from '../seeders/parkSeeder.js';
 
 export const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'jakartapark_db',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'jakartapark_db',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-export const initializeDatabase = async() => {
-    try {
-        // Create connection without database selected
-        const initPool = mysql.createPool({
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            waitForConnections: true,
-            connectionLimit: 10,
-            queueLimit: 0
-        });
+export const initializeDatabase = async () => {
+  try {
+    // Create connection without database selected
+    const initPool = mysql.createPool({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
+    });
 
-        // Create database if not exists
-        await initPool.query(`CREATE DATABASE IF NOT EXISTS jakartapark_db`);
-        console.log('Database jakartapark_db created or already exists');
-
-        // Use the created database
-        await initPool.query(`USE jakartapark_db`);
-        console.log('Using database jakartapark_db');
-
-        // Create users table if not exists
-        const createUsersTable = `
+    // Create database if not exists
+    await initPool.query(`CREATE DATABASE IF NOT EXISTS jakartapark_db`);
+    console.log('Database jakartapark_db created or already exists');
+    
+    // Use the created database
+    await initPool.query(`USE jakartapark_db`);
+    console.log('Using database jakartapark_db');
+    
+    // Create users table if not exists
+    const createUsersTable = `
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
@@ -41,9 +40,9 @@ export const initializeDatabase = async() => {
         role ENUM('admin', 'user') DEFAULT 'user',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`;
-
-        // Create parks table if not exists
-        const createParksTable = `
+    
+    // Create parks table if not exists
+    const createParksTable = `
       CREATE TABLE IF NOT EXISTS parks (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
@@ -58,8 +57,8 @@ export const initializeDatabase = async() => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )`;
 
-        // Create damaged_parks table if not exists
-        const createDamagedParksTable = `
+    // Create damaged_parks table if not exists
+    const createDamagedParksTable = `
       CREATE TABLE IF NOT EXISTS damaged_parks (
         id INT AUTO_INCREMENT PRIMARY KEY,
         park_id INT,
@@ -72,8 +71,8 @@ export const initializeDatabase = async() => {
         FOREIGN KEY (reported_by) REFERENCES users(id)
       )`;
 
-        // Create repaired_parks table if not exists
-        const createRepairedParksTable = `
+    // Create repaired_parks table if not exists
+    const createRepairedParksTable = `
       CREATE TABLE IF NOT EXISTS repaired_parks (
         id INT AUTO_INCREMENT PRIMARY KEY,
         damaged_park_id INT,
@@ -85,8 +84,8 @@ export const initializeDatabase = async() => {
         FOREIGN KEY (repaired_by) REFERENCES users(id)
       )`;
 
-        // Create reviews table if not exists
-        const createReviewsTable = `
+    // Create reviews table if not exists
+    const createReviewsTable = `
       CREATE TABLE IF NOT EXISTS reviews (
         id INT AUTO_INCREMENT PRIMARY KEY,
         park_id INT,
@@ -98,8 +97,8 @@ export const initializeDatabase = async() => {
         FOREIGN KEY (user_id) REFERENCES users(id)
       )`;
 
-        // Create blacklisted_tokens table if not exists
-        const createBlacklistTable = `
+    // Create blacklisted_tokens table if not exists
+    const createBlacklistTable = `
       CREATE TABLE IF NOT EXISTS blacklisted_tokens (
         id INT AUTO_INCREMENT PRIMARY KEY,
         token TEXT NOT NULL,
@@ -108,21 +107,18 @@ export const initializeDatabase = async() => {
         INDEX token_index (id, expires_at)
       )`;
 
-        // Execute table creation queries
-        await pool.execute(createUsersTable);
-        await pool.execute(createParksTable);
-        await pool.execute(createDamagedParksTable);
-        await pool.execute(createRepairedParksTable);
-        await pool.execute(createReviewsTable);
-        await pool.execute(createBlacklistTable);
+    // Execute table creation queries
+    await pool.execute(createUsersTable);
+    await pool.execute(createParksTable);
+    await pool.execute(createDamagedParksTable);
+    await pool.execute(createRepairedParksTable);
+    await pool.execute(createReviewsTable);
+    await pool.execute(createBlacklistTable);
+    
+    console.log('All tables initialized successfully');
 
-        console.log('All tables initialized successfully');
-
-        // Panggil seeder setelah tabel dibuat
-        await parkSeeder();
-
-    } catch (error) {
-        console.error('Gagal menginisialisasi database:', error);
-        throw error;
-    }
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    throw error;
+  }
 };
