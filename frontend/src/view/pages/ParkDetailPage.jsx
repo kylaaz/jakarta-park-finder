@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Link, useParams } from 'react-router-dom';
 
+import DamageReportForm from '../../components/damage/DamageReportForm';
 import ReviewForm from '../../components/review/ReviewForm';
 import { getParkById } from '../../services/parkService';
 import { getReviewsByParkId } from '../../services/reviewService';
@@ -220,7 +221,10 @@ const ParkDetailPage = () => {
               </div>
 
               <div>
-                <h2 className="text-xl font-semibold text-green-700 mb-4">Facilities</h2>
+                <h2 className="text-xl font-semibold flex items-center gap-2 text-green-700 mb-4">
+                  Facilities
+                  <DamageReportForm />
+                </h2>
                 <div className="flex flex-wrap gap-2">
                   {facilities.map((facility, index) => (
                     <span
