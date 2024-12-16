@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../auth/Modal';
@@ -8,6 +8,7 @@ function Navbar({ onMenuToggle }) {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +27,8 @@ function Navbar({ onMenuToggle }) {
     onMenuToggle && onMenuToggle(!isMenuOpen);
   };
 
+  const isAboutPage = location.pathname === '/about';
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -39,7 +42,7 @@ function Navbar({ onMenuToggle }) {
             <img src="/logo_jakartaparkfinder.png" alt="Jakarta Park Finder" className="h-16 md:h-20 lg:h-24" />
             <span
               className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors duration-300 ${
-                isMenuOpen || scrolled ? 'text-primary' : 'text-white'
+                isMenuOpen || scrolled ? 'text-primary' : isAboutPage ? 'text-green-800' : 'text-white'
               }`}
             >
               Jakarta Park Finder
@@ -50,7 +53,7 @@ function Navbar({ onMenuToggle }) {
           <button onClick={toggleMenu} className="md:hidden absolute right-4 p-2 z-50">
             <svg
               className={`w-6 h-6 transition-colors duration-300 ${
-                isMenuOpen || scrolled ? 'text-primary' : 'text-white'
+                isMenuOpen || scrolled ? 'text-primary' : isAboutPage ? 'text-green-800' : 'text-white'
               }`}
               fill="none"
               stroke="currentColor"
@@ -71,8 +74,8 @@ function Navbar({ onMenuToggle }) {
                 <Link
                   key={item}
                   to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                  className={`relative group py-2 transition-colors duration-300 text-white/90 hover:text-white ${
-                    isMenuOpen || scrolled ? 'text-primary' : 'text-white'
+                  className={`relative group py-2 transition-colors duration-300 ${
+                    isMenuOpen || scrolled ? 'text-primary' : isAboutPage ? 'text-green-800' : 'text-white'
                   }`}
                 >
                   <span className="relative z-10 tracking-wide">{item}</span>
@@ -88,7 +91,9 @@ function Navbar({ onMenuToggle }) {
               <input
                 type="text"
                 placeholder="Search"
-                className="px-4 py-2 rounded-full bg-white/30 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white"
+                className={`px-4 py-2 rounded-full ${
+                  isAboutPage ? 'bg-green-800 text-white placeholder-white' : 'bg-white/30 text-white placeholder-white'
+                } focus:outline-none focus:ring-2 focus:ring-white`}
               />
             </div>
             <AuthModal />
