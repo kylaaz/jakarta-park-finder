@@ -6,16 +6,16 @@ function Register({ setSelectedTab }) {
       <form className="mt-2 flex flex-col gap-2">
         <label className="form-control">
           <div className="label">
-            <span className="label-text">Email</span>
+            <span className="label-text">Name</span>
           </div>
-          <input type="email" placeholder="Enter your email" className="input input-bordered" />
+          <input type="text" placeholder="Enter your name" className="input input-bordered" />
         </label>
 
         <label className="form-control">
           <div className="label">
-            <span className="label-text">Username</span>
+            <span className="label-text">Email</span>
           </div>
-          <input type="text" placeholder="Enter your username" className="input input-bordered" />
+          <input type="email" placeholder="Enter your email" className="input input-bordered" />
         </label>
 
         <div className="flex gap-4">
