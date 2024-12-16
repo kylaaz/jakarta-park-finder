@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../auth/Modal';
 
@@ -26,30 +27,33 @@ function Navbar({ onMenuToggle }) {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled || isMenuOpen ? 'bg-[#CCCCCC]/50 backdrop-blur-sm shadow-lg' : ''
-    }`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled || isMenuOpen ? 'bg-[#CCCCCC]/50 backdrop-blur-sm shadow-lg' : ''
+      }`}
+    >
       <div className="container mx-auto px-4 py-2">
         <div className="flex items-center">
           {/* Logo */}
           <div className="flex items-center space-x-2 w-1/4">
             <img src="/logo_jakartaparkfinder.png" alt="Jakarta Park Finder" className="h-16 md:h-20 lg:h-24" />
-            <span className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors duration-300 ${
-              isMenuOpen || scrolled ? 'text-[#2D5A27]' : 'text-white'
-            }`}>Jakarta Park Finder</span>
+            <span
+              className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors duration-300 ${
+                isMenuOpen || scrolled ? 'text-[#2D5A27]' : 'text-white'
+              }`}
+            >
+              Jakarta Park Finder
+            </span>
           </div>
 
           {/* Mobile menu button */}
-          <button 
-            onClick={toggleMenu}
-            className="md:hidden absolute right-4 p-2 z-50"
-          >
-            <svg 
+          <button onClick={toggleMenu} className="md:hidden absolute right-4 p-2 z-50">
+            <svg
               className={`w-6 h-6 transition-colors duration-300 ${
                 isMenuOpen || scrolled ? 'text-[#2D5A27]' : 'text-white'
-              }`} 
-              fill="none" 
-              stroke="currentColor" 
+              }`}
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
               {isMenuOpen ? (

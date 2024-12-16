@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { getParkById } from '../../services/parkService';
 import TemplateCreator from '../../view/templates/template-creator';
 

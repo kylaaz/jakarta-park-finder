@@ -1,12 +1,11 @@
-import React from 'react';
-
 function Hero() {
   const scrollToMainContent = () => {
     document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="relative min-h-[500px] md:min-h-[550px] lg:min-h-[600px] flex items-center justify-center" 
+    <section
+      className="relative min-h-[500px] md:min-h-[550px] lg:min-h-[600px] flex items-center justify-center"
       style={{
         backgroundImage: `
           linear-gradient(to bottom,
@@ -16,8 +15,9 @@ function Hero() {
           #538D4D 60%,
           #85B06C 80%,
           #FFFFFF)
-        `
-      }}>
+        `,
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 text-center">
         <h1 className="text-6xl font-bold text-white mb-6">Jakarta Park Finder</h1>
         <p className="text-xl text-white mb-10">

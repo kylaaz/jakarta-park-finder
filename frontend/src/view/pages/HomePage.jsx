@@ -1,10 +1,8 @@
-import { Link } from 'react-router-dom';
-import AuthModal from '../../components/auth/Modal';
-import ParkList from '../../components/park/ParkList';
-import { useAuth } from '../../context/AuthContext';
+import Footer from '../../components/layout/Footer';
 import Hero from '../../components/layout/Hero';
 import Navbar from '../../components/layout/Navbar';
-import Footer from '../../components/layout/Footer';
+import ParkList from '../../components/park/ParkList';
+import { useAuth } from '../../context/AuthContext';
 
 const HomePage = () => {
   const { user } = useAuth();

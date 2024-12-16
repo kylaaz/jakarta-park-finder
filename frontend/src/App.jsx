@@ -1,8 +1,9 @@
-import { Routes, Route } from 'react-router-dom'
-import HomePage from './view/pages/HomePage'
-import AboutPage from './view/pages/AboutPage'
-import InformationPage from './view/pages/InformationPage'
-import ParkDetailPage from './view/pages/ParkDetailPage'
+import { Route, Routes } from 'react-router-dom';
+
+import AboutPage from './view/pages/AboutPage';
+import HomePage from './view/pages/HomePage';
+import InformationPage from './view/pages/InformationPage';
+import ParkDetailPage from './view/pages/ParkDetailPage';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <Route path="/information" element={<InformationPage />} />
       <Route path="/park/:id" element={<ParkDetailPage />} />
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;
