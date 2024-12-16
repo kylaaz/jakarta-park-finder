@@ -28,6 +28,7 @@ function Navbar({ onMenuToggle }) {
   };
 
   const isAboutPage = location.pathname === '/about';
+  const isInformationPage = location.pathname === '/information';
 
   return (
     <nav
@@ -42,7 +43,11 @@ function Navbar({ onMenuToggle }) {
             <img src="/logo_jakartaparkfinder.png" alt="Jakarta Park Finder" className="h-16 md:h-20 lg:h-24" />
             <span
               className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors duration-300 ${
-                isMenuOpen || scrolled ? 'text-primary' : isAboutPage ? 'text-green-800' : 'text-white'
+                isMenuOpen || scrolled
+                  ? 'text-primary'
+                  : isAboutPage || isInformationPage
+                    ? 'text-green-800'
+                    : 'text-white'
               }`}
             >
               Jakarta Park Finder
@@ -53,7 +58,11 @@ function Navbar({ onMenuToggle }) {
           <button onClick={toggleMenu} className="md:hidden absolute right-4 p-2 z-50">
             <svg
               className={`w-6 h-6 transition-colors duration-300 ${
-                isMenuOpen || scrolled ? 'text-primary' : isAboutPage ? 'text-green-800' : 'text-white'
+                isMenuOpen || scrolled
+                  ? 'text-primary'
+                  : isAboutPage || isInformationPage
+                    ? 'text-green-800'
+                    : 'text-white'
               }`}
               fill="none"
               stroke="currentColor"
@@ -75,7 +84,11 @@ function Navbar({ onMenuToggle }) {
                   key={item}
                   to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                   className={`relative group py-2 transition-colors duration-300 ${
-                    isMenuOpen || scrolled ? 'text-primary' : isAboutPage ? 'text-green-800' : 'text-white'
+                    isMenuOpen || scrolled
+                      ? 'text-primary'
+                      : isAboutPage || isInformationPage
+                        ? 'text-green-800'
+                        : 'text-white'
                   }`}
                 >
                   <span className="relative z-10 tracking-wide">{item}</span>
@@ -92,7 +105,9 @@ function Navbar({ onMenuToggle }) {
                 type="text"
                 placeholder="Search"
                 className={`px-4 py-2 rounded-full ${
-                  isAboutPage ? 'bg-green-800 text-white placeholder-white' : 'bg-white/30 text-white placeholder-white'
+                  isAboutPage || isInformationPage
+                    ? 'bg-green-800 text-white placeholder-white'
+                    : 'bg-white/30 text-white placeholder-white'
                 } focus:outline-none focus:ring-2 focus:ring-white`}
               />
             </div>
