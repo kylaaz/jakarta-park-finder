@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../auth/Modal';
 
-function Navbar({ onMenuToggle }) {
+function Navbar({ onMenuToggle, useGreenTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user } = useAuth();
@@ -29,6 +29,8 @@ function Navbar({ onMenuToggle }) {
 
   const isAboutPage = location.pathname === '/about';
   const isInformationPage = location.pathname === '/information';
+  const isNotificationsPage = location.pathname === '/notifications';
+  const useGreenColor = isAboutPage || isInformationPage || isNotificationsPage || useGreenTheme;
 
   return (
     <nav
@@ -43,11 +45,7 @@ function Navbar({ onMenuToggle }) {
             <img src="/logo_jakartaparkfinder.png" alt="Jakarta Park Finder" className="h-16 md:h-20 lg:h-24" />
             <span
               className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors duration-300 ${
-                isMenuOpen || scrolled
-                  ? 'text-primary'
-                  : isAboutPage || isInformationPage
-                    ? 'text-green-800'
-                    : 'text-white'
+                isMenuOpen || scrolled ? 'text-primary' : useGreenColor ? 'text-green-800' : 'text-white'
               }`}
             >
               Jakarta Park Finder
@@ -58,11 +56,7 @@ function Navbar({ onMenuToggle }) {
           <button onClick={toggleMenu} className="md:hidden absolute right-4 p-2 z-50">
             <svg
               className={`w-6 h-6 transition-colors duration-300 ${
-                isMenuOpen || scrolled
-                  ? 'text-primary'
-                  : isAboutPage || isInformationPage
-                    ? 'text-green-800'
-                    : 'text-white'
+                isMenuOpen || scrolled ? 'text-primary' : useGreenColor ? 'text-green-800' : 'text-white'
               }`}
               fill="none"
               stroke="currentColor"
@@ -84,11 +78,7 @@ function Navbar({ onMenuToggle }) {
                   key={item}
                   to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                   className={`relative group py-2 transition-colors duration-300 ${
-                    isMenuOpen || scrolled
-                      ? 'text-primary'
-                      : isAboutPage || isInformationPage
-                        ? 'text-green-800'
-                        : 'text-white'
+                    isMenuOpen || scrolled ? 'text-primary' : useGreenColor ? 'text-green-800' : 'text-white'
                   }`}
                 >
                   <span className="relative z-10 tracking-wide">{item}</span>
@@ -105,12 +95,38 @@ function Navbar({ onMenuToggle }) {
                 type="text"
                 placeholder="Search"
                 className={`px-4 py-2 rounded-full ${
-                  isAboutPage || isInformationPage
+                  useGreenColor
                     ? 'bg-green-800 text-white placeholder-white'
                     : 'bg-white/30 text-white placeholder-white'
                 } focus:outline-none focus:ring-2 focus:ring-white`}
               />
             </div>
+            {/* Notification Icon */}
+            <Link
+              to="/notifications"
+              className={`relative p-2 rounded-full transition-colors duration-300 ${
+                isMenuOpen || scrolled
+                  ? 'text-primary hover:bg-gray-100'
+                  : useGreenColor
+                    ? 'text-green-800 hover:bg-green-100'
+                    : 'text-white hover:bg-white/20'
+              }`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+            </Link>
             <AuthModal />
           </div>
         </div>
