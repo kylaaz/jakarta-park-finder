@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TemplateCreator = ({ park }) => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
