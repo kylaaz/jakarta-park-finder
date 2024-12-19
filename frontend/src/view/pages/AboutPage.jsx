@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import Footer from '../../components/layout/Footer';
 import Navbar from '../../components/layout/Navbar';
@@ -80,7 +80,9 @@ const AboutPage = () => {
           {/* Hero Section */}
           <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
             <div>
-              <h1 className="text-4xl font-bold text-green-900 mb-4">Discover Jakarta's Urban Green Spaces</h1>
+              <h1 className="text-4xl font-bold text-green-900 mb-5 mt-10">
+                Discover Jakarta&apos;s Urban Green Spaces
+              </h1>
               <p className="text-xl text-gray-700 mb-6">
                 Your ultimate guide to exploring, enjoying, and connecting with parks across Jakarta.
               </p>
@@ -129,7 +131,8 @@ const AboutPage = () => {
                     <span className="font-bold">3. Track Progress:</span> Follow up on your reported issues
                   </li>
                   <li>
-                    <span className="font-bold">4. Community Impact:</span> Help keep Jakarta's parks clean and safe
+                    <span className="font-bold">4. Community Impact:</span> Help keep Jakarta&apos;s parks clean and
+                    safe
                   </li>
                 </ul>
               </div>
@@ -159,7 +162,7 @@ const AboutPage = () => {
 
           {/* Jakarta Park Statistics */}
           <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg p-8 text-center">
-            <h2 className="text-3xl font-bold mb-6">Jakarta's Green Landscape</h2>
+            <h2 className="text-3xl font-bold mb-6">Jakarta&apos;s Green Landscape</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div>
                 <p className="text-4xl font-bold mb-2">57+</p>

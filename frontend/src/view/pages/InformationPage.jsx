@@ -8,7 +8,7 @@ const InformationPage = () => {
       <Navbar />
       <main className="flex-grow pt-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Park Information</h1>
+          <h1 className="text-3xl font-bold mb-8 mt-7">Park Information</h1>
           <ParkInformation />
         </div>
       </main>
