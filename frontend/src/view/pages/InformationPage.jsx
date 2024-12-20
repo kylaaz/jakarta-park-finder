@@ -1,18 +1,12 @@
-import Footer from '../../components/layout/Footer';
-import Navbar from '../../components/layout/Navbar';
 import ParkInformation from '../../components/park/ParkInformation';
 
 const InformationPage = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <main className="flex-grow pt-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 mt-7">Park Information</h1>
-          <ParkInformation />
-        </div>
-      </main>
-      <Footer />
+    <div className="bg-white pt-28 px-4">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8 mt-8 text-green-900">Park Information</h1>
+        <ParkInformation />
+      </div>
     </div>
   );
 };

@@ -1,8 +1,5 @@
 import { useState } from 'react';
 
-import Footer from '../../components/layout/Footer';
-import Navbar from '../../components/layout/Navbar';
-
 const MapPinIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -73,115 +70,106 @@ const ParkFeature = ({ icon: Icon, title, description, color }) => {
 
 const AboutPage = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <Navbar />
-      <main className="flex-grow pt-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Hero Section */}
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
+    <div className="bg-white pt-28 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Hero Section */}
+        <div className="text-center mb-16 mt-8">
+          <h1 className="text-4xl font-bold text-green-900 mb-5">
+            Discover Jakarta&apos;s Urban Green Spaces
+          </h1>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+            Your ultimate guide to exploring, enjoying, and connecting with parks across Jakarta.
+          </p>
+        </div>
+
+        {/* Park Features Grid */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <ParkFeature
+            icon={MapPinIcon}
+            title="Explore Locations"
+            description="Discover hidden green spaces and park locations across Jakarta with our comprehensive guide."
+            color="bg-green-500"
+          />
+          <ParkFeature
+            icon={ReviewIcon}
+            title="Park Reviews"
+            description="Share your experiences and read reviews from other park visitors to make informed choices."
+            color="bg-emerald-500"
+          />
+          <ParkFeature
+            icon={ReportIcon}
+            title="Report Issues"
+            description="Help maintain our parks by reporting maintenance needs, damages, or safety concerns."
+            color="bg-lime-600"
+          />
+        </div>
+
+        {/* Community Reporting Section */}
+        <section className="bg-gray-50 rounded-lg shadow-md p-8 mb-12">
+          <h2 className="text-3xl font-bold text-green-900 mb-6 text-center">Community-Driven Park Maintenance</h2>
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h1 className="text-4xl font-bold text-green-900 mb-5 mt-10">
-                Discover Jakarta&apos;s Urban Green Spaces
-              </h1>
-              <p className="text-xl text-gray-700 mb-6">
-                Your ultimate guide to exploring, enjoying, and connecting with parks across Jakarta.
-              </p>
+              <h3 className="text-2xl font-semibold text-green-800 mb-4">How Our Reporting Works</h3>
+              <ul className="space-y-4 text-gray-700">
+                <li>
+                  <span className="font-bold">1. Spot an Issue:</span> Notice something wrong in a park?
+                </li>
+                <li>
+                  <span className="font-bold">2. Report Easily:</span> Use our simple, user-friendly reporting system
+                </li>
+                <li>
+                  <span className="font-bold">3. Track Progress:</span> Follow up on your reported issues
+                </li>
+                <li>
+                  <span className="font-bold">4. Community Impact:</span> Help keep Jakarta&apos;s parks clean and
+                  safe
+                </li>
+              </ul>
             </div>
-            <div className="hidden md:block">
-              <img src="/api/placeholder/600/400" alt="Jakarta Park Landscape" className="rounded-lg shadow-lg" />
-            </div>
-          </div>
-
-          {/* Park Features Grid */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <ParkFeature
-              icon={MapPinIcon}
-              title="Explore Locations"
-              description="Discover hidden green spaces and park locations across Jakarta with our comprehensive guide."
-              color="bg-green-500"
-            />
-            <ParkFeature
-              icon={ReviewIcon}
-              title="Park Reviews"
-              description="Share your experiences and read reviews from other park visitors to make informed choices."
-              color="bg-emerald-500"
-            />
-            <ParkFeature
-              icon={ReportIcon}
-              title="Report Issues"
-              description="Help maintain our parks by reporting maintenance needs, damages, or safety concerns."
-              color="bg-lime-600"
-            />
-          </div>
-
-          {/* Community Reporting Section */}
-          <section className="bg-white rounded-lg shadow-md p-8 mb-12">
-            <h2 className="text-3xl font-bold text-green-900 mb-6 text-center">Community-Driven Park Maintenance</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-2xl font-semibold text-green-800 mb-4">How Our Reporting Works</h3>
-                <ul className="space-y-4 text-gray-700">
-                  <li>
-                    <span className="font-bold">1. Spot an Issue:</span> Notice something wrong in a park?
-                  </li>
-                  <li>
-                    <span className="font-bold">2. Report Easily:</span> Use our simple, user-friendly reporting system
-                  </li>
-                  <li>
-                    <span className="font-bold">3. Track Progress:</span> Follow up on your reported issues
-                  </li>
-                  <li>
-                    <span className="font-bold">4. Community Impact:</span> Help keep Jakarta&apos;s parks clean and
-                    safe
-                  </li>
-                </ul>
-              </div>
-              <div className="bg-green-50 p-6 rounded-lg">
-                <h3 className="text-2xl font-semibold text-green-800 mb-4">What Can You Report?</h3>
-                <div className="grid grid-cols-2 gap-3 text-gray-700">
-                  <div>
-                    <p className="font-semibold">Infrastructure</p>
-                    <ul className="text-sm list-disc list-inside">
-                      <li>Broken Benches</li>
-                      <li>Damaged Paths</li>
-                      <li>Faulty Lighting</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="font-semibold">Environmental</p>
-                    <ul className="text-sm list-disc list-inside">
-                      <li>Trash Accumulation</li>
-                      <li>Tree Damage</li>
-                      <li>Landscape Issues</li>
-                    </ul>
-                  </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-2xl font-semibold text-green-800 mb-4">What Can You Report?</h3>
+              <div className="grid grid-cols-2 gap-3 text-gray-700">
+                <div>
+                  <p className="font-semibold">Infrastructure</p>
+                  <ul className="text-sm list-disc list-inside">
+                    <li>Broken Benches</li>
+                    <li>Damaged Paths</li>
+                    <li>Faulty Lighting</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold">Environmental</p>
+                  <ul className="text-sm list-disc list-inside">
+                    <li>Trash Accumulation</li>
+                    <li>Tree Damage</li>
+                    <li>Landscape Issues</li>
+                  </ul>
                 </div>
               </div>
             </div>
-          </section>
-
-          {/* Jakarta Park Statistics */}
-          <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg p-8 text-center">
-            <h2 className="text-3xl font-bold mb-6">Jakarta&apos;s Green Landscape</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <p className="text-4xl font-bold mb-2">57+</p>
-                <p className="text-lg">Public Parks</p>
-              </div>
-              <div>
-                <p className="text-4xl font-bold mb-2">350 Ha</p>
-                <p className="text-lg">Total Green Area</p>
-              </div>
-              <div>
-                <p className="text-4xl font-bold mb-2">10+</p>
-                <p className="text-lg">Districts Covered</p>
-              </div>
-            </div>
-            <p className="mt-6 text-xl">Explore the green heart of Jakarta and reconnect with nature in the city.</p>
           </div>
+        </section>
+
+        {/* Jakarta Park Statistics */}
+        <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg p-8 text-center mb-12">
+          <h2 className="text-3xl font-bold mb-6">Jakarta&apos;s Green Landscape</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <p className="text-4xl font-bold mb-2">57+</p>
+              <p className="text-lg">Public Parks</p>
+            </div>
+            <div>
+              <p className="text-4xl font-bold mb-2">350 Ha</p>
+              <p className="text-lg">Total Green Area</p>
+            </div>
+            <div>
+              <p className="text-4xl font-bold mb-2">10+</p>
+              <p className="text-lg">Districts Covered</p>
+            </div>
+          </div>
+          <p className="mt-6 text-xl">Explore the green heart of Jakarta and reconnect with nature in the city.</p>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 };

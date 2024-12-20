@@ -1,8 +1,4 @@
-// frontend/src/view/pages/NotificationsPage.jsx
 import { useState } from 'react';
-
-import Footer from '../../components/layout/Footer';
-import Navbar from '../../components/layout/Navbar';
 
 export default function NotificationsPage() {
   const [notifications] = useState([
@@ -23,26 +19,22 @@ export default function NotificationsPage() {
   ]);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar useGreenTheme={true} />
-      <main className="flex-grow pt-24 px-4">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Notifications</h1>
-          <div className="space-y-4">
-            {notifications.map((notification) => (
-              <div
-                key={notification.id}
-                className={`p-4 rounded-lg border ${notification.read ? 'bg-white' : 'bg-green-50'}`}
-              >
-                <h3 className="font-semibold text-gray-900">{notification.title}</h3>
-                <p className="text-gray-600 mt-1">{notification.message}</p>
-                <span className="text-sm text-gray-500 mt-2">{notification.time}</span>
-              </div>
-            ))}
-          </div>
+    <div className="min-h-screen bg-white pt-28 px-4">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-2xl font-bold text-green-900 mb-6 mt-8">Notifications</h1>
+        <div className="space-y-4">
+          {notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className={`p-4 rounded-lg border ${notification.read ? 'bg-gray-50' : 'bg-green-50'}`}
+            >
+              <h3 className="font-semibold text-gray-900">{notification.title}</h3>
+              <p className="text-gray-600 mt-1">{notification.message}</p>
+              <span className="text-sm text-gray-500 mt-2">{notification.time}</span>
+            </div>
+          ))}
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }
