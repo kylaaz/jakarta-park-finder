@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-
-import { getParkList } from '../../services/parkService';
+import { useSearchParams } from 'react-router-dom';
+import parkService from '../../services/parkService';
 import ParkCard from './ParkCard';
 
 const ParkList = () => {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search');
   const [parks, setParks] = useState([]);
   const [visibleParks, setVisibleParks] = useState(6);
   const [loading, setLoading] = useState(true);
@@ -14,10 +16,22 @@ const ParkList = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Starting to fetch parks');
-        const data = await getParkList();
-        console.log('Fetched parks:', data);
-        setParks(data || []);
+        let response;
+        
+        if (searchQuery) {
+          response = await parkService.searchParks(searchQuery);
+        } else {
+          response = await parkService.getParkList();
+        }
+
+        console.log('Fetched parks:', response);
+        if (response.status === 'success' && Array.isArray(response.data)) {
+          setParks(response.data);
+          // Reset visible parks when search changes
+          setVisibleParks(6);
+        } else {
+          setError('Invalid data format received from server');
+        }
       } catch (err) {
         console.error('Error in fetchParks:', err);
         setError(err.message || 'Failed to load parks');
@@ -27,7 +41,7 @@ const ParkList = () => {
     };
 
     fetchParks();
-  }, []);
+  }, [searchQuery]); // Re-fetch when search query changes
 
   const handleViewMore = () => {
     setVisibleParks((prevVisible) => Math.min(prevVisible + 6, parks.length));
@@ -93,7 +107,7 @@ const ParkList = () => {
               d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
             />
           </svg>
-          <span>No parks found</span>
+          <span>{searchQuery ? `No parks found for "${searchQuery}"` : 'No parks found'}</span>
         </div>
       </div>
     );
@@ -101,6 +115,14 @@ const ParkList = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {searchQuery && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900">
+            Search results for "{searchQuery}"
+          </h2>
+          <p className="text-gray-600 mt-2">Found {parks.length} parks</p>
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {parks.slice(0, visibleParks).map((park) => (
           <ParkCard key={park.id} park={park} />

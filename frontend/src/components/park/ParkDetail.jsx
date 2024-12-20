@@ -13,8 +13,9 @@ const ParkDetail = () => {
   useEffect(() => {
     const fetchParkDetails = async () => {
       try {
-        const parkData = await getParkById(id);
-        setPark(parkData);
+        const response = await getParkById(id);
+        // Ensure we're using the data property from the response
+        setPark(response.data);
         setLoading(false);
       } catch (err) {
         setError(err);
@@ -29,7 +30,14 @@ const ParkDetail = () => {
   if (error) return <div>Error loading park details: {error.message}</div>;
   if (!park) return <div>Park not found</div>;
 
-  return <TemplateCreator park={park} />;
+  // Parse facilities if it's a string
+  const parsedPark = {
+    ...park,
+    facilities: typeof park.facilities === 'string' ? JSON.parse(park.facilities) : park.facilities || [],
+    reviews: park.reviews || [] // Ensure reviews is always an array
+  };
+
+  return <TemplateCreator park={parsedPark} />;
 };
 
 export default ParkDetail;
