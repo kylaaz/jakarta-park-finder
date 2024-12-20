@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../auth/Modal';
 
 function Navbar({ onMenuToggle, useGreenTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState('');
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,27 +33,25 @@ function Navbar({ onMenuToggle, useGreenTheme }) {
     onMenuToggle && onMenuToggle(!isMenuOpen);
   };
 
-  const isAboutPage = location.pathname === '/about';
-  const isInformationPage = location.pathname === '/information';
-  const isNotificationsPage = location.pathname === '/notifications';
-  const useGreenColor = isAboutPage || isInformationPage || isNotificationsPage || useGreenTheme;
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
+  const isHomePage = location.pathname === '/';
+  const showGreenBackground = scrolled || !isHomePage;
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled || isMenuOpen ? 'bg-[#CCCCCC]/50 backdrop-blur-sm shadow-lg' : ''
-      }`}
-    >
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${showGreenBackground ? 'bg-[#2D5A27] shadow-lg' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4 py-2">
         <div className="flex items-center">
           {/* Logo */}
           <div className="flex items-center space-x-2 w-1/4">
             <img src="/logo_jakartaparkfinder.png" alt="Jakarta Park Finder" className="h-16 md:h-20 lg:h-24" />
-            <span
-              className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors duration-300 ${
-                isMenuOpen || scrolled ? 'text-primary' : useGreenColor ? 'text-green-800' : 'text-white'
-              }`}
-            >
+            <span className={`text-lg md:text-xl lg:text-2xl font-semibold ${scrolled ? 'text-white' : 'text-white'}`}>
               Jakarta Park Finder
             </span>
           </div>
@@ -55,9 +59,7 @@ function Navbar({ onMenuToggle, useGreenTheme }) {
           {/* Mobile menu button */}
           <button onClick={toggleMenu} className="md:hidden absolute right-4 p-2 z-50">
             <svg
-              className={`w-6 h-6 transition-colors duration-300 ${
-                isMenuOpen || scrolled ? 'text-primary' : useGreenColor ? 'text-green-800' : 'text-white'
-              }`}
+              className={`w-6 h-6 ${scrolled ? 'text-white' : 'text-white'}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -77,9 +79,7 @@ function Navbar({ onMenuToggle, useGreenTheme }) {
                 <Link
                   key={item}
                   to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                  className={`relative group py-2 transition-colors duration-300 ${
-                    isMenuOpen || scrolled ? 'text-primary' : useGreenColor ? 'text-green-800' : 'text-white'
-                  }`}
+                  className={`relative group py-2 ${scrolled ? 'text-white' : 'text-white'}`}
                 >
                   <span className="relative z-10 tracking-wide">{item}</span>
                   <div className="absolute bottom-0 left-0 w-full h-[1px] transform origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100 bg-white"></div>
@@ -90,44 +90,72 @@ function Navbar({ onMenuToggle, useGreenTheme }) {
 
           {/* Desktop Auth */}
           <div className="hidden md:flex items-center space-x-4">
-            <div className="relative">
+            <form onSubmit={handleSearch} className="relative">
               <input
                 type="text"
-                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search Parks"
                 className={`px-4 py-2 rounded-full ${
-                  useGreenColor
-                    ? 'bg-green-800 text-white placeholder-white'
-                    : 'bg-white/30 text-white placeholder-white'
-                } focus:outline-none focus:ring-2 focus:ring-white`}
+                  scrolled ? 'bg-white/30' : 'bg-white/30'
+                } text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white`}
               />
-            </div>
-            {/* Notification Icon */}
-            <Link
-              to="/notifications"
-              className={`relative p-2 rounded-full transition-colors duration-300 ${
-                isMenuOpen || scrolled
-                  ? 'text-primary hover:bg-gray-100'
-                  : useGreenColor
-                    ? 'text-green-800 hover:bg-green-100'
-                    : 'text-white hover:bg-white/20'
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            </form>
+            {user ? (
+              <div className="flex items-center space-x-4">
+                {/* Notification Icon */}
+                <Link
+                  to="/notifications"
+                  className={`relative p-2 rounded-full ${scrolled ? 'text-white hover:bg-white/20' : 'text-white hover:bg-white/20'}`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                  {/* Add notification badge */}
+                  <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+                </Link>
+                {/* User Info & Logout */}
+                <div className="flex items-center space-x-4">
+                  <Link
+                    to="/profile"
+                    className={`flex items-center space-x-2 ${scrolled ? 'text-white' : 'text-white'}`}
+                  >
+                    <span className="text-sm font-medium">{user.name}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                    </svg>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className={`px-4 py-2 rounded-full border ${
+                      scrolled ? 'border-white text-white hover:bg-white/20' : 'border-white text-white hover:bg-white/20'
+                    }`}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className={`px-4 py-2 rounded-full border ${
+                  scrolled ? 'border-white text-white hover:bg-white/20' : 'border-white text-white hover:bg-white/20'
+                }`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-            </Link>
-            <AuthModal />
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -148,14 +176,67 @@ function Navbar({ onMenuToggle, useGreenTheme }) {
                 </Link>
               ))}
               <div className="px-4">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="w-full px-4 py-2 rounded-full bg-[#2D5A27]/10 text-[#2D5A27] focus:outline-none"
-                />
+                <form onSubmit={handleSearch}>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search Parks"
+                    className="w-full px-4 py-2 rounded-full bg-[#2D5A27]/10 text-[#2D5A27] focus:outline-none"
+                  />
+                </form>
               </div>
               <div className="px-4 py-4 bg-gray-50 space-y-3 rounded-b-lg">
-                <AuthModal isMobile />
+                {user ? (
+                  <div className="flex flex-col space-y-3">
+                    <Link
+                      to="/profile"
+                      className="flex items-center justify-center space-x-2 text-[#2D5A27] hover:bg-[#2D5A27]/10 py-2 rounded-lg"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                      </svg>
+                      <span>{user.name}</span>
+                    </Link>
+                    <Link
+                      to="/notifications"
+                      className="flex items-center justify-center space-x-2 text-[#2D5A27] hover:bg-[#2D5A27]/10 py-2 rounded-lg"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                        />
+                      </svg>
+                      <span>Notifications</span>
+                      <span className="block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 border border-[#2D5A27] text-[#2D5A27] rounded-full hover:bg-[#2D5A27]/10"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="w-full px-4 py-2 border border-[#2D5A27] text-[#2D5A27] rounded-full hover:bg-[#2D5A27]/10 text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                )}
               </div>
             </div>
           </div>
