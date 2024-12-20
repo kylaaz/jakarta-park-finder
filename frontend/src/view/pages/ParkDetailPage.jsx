@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Link, useParams } from 'react-router-dom';
 
-import DamageReportForm from '../../components/damage/DamageReportForm';
 import ReviewForm from '../../components/review/ReviewForm';
-import { getParkById } from '../../services/parkService';
-import { getReviewsByParkId } from '../../services/reviewService';
+import { useAuth } from '../../context/AuthContext';
+import parkService from '../../services/parkService';
+import reviewService from '../../services/reviewService';
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -19,6 +19,7 @@ L.Icon.Default.mergeOptions({
 
 const ParkDetailPage = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const [park, setPark] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,25 +30,18 @@ const ParkDetailPage = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        console.log('Fetching data for park ID:', id);
+        setError(null);
 
         // Fetch park details
-        const parkData = await getParkById(id);
-        console.log('Park data:', parkData);
-        setPark(parkData);
+        const parkResponse = await parkService.getParkById(id);
+        setPark(parkResponse.data);
 
-        // Fetch reviews separately
-        const reviewsData = await getReviewsByParkId(id);
-        console.log('Reviews data:', reviewsData);
-        if (Array.isArray(reviewsData)) {
-          setReviews(reviewsData);
-        } else {
-          console.error('Reviews data is not an array:', reviewsData);
-          setReviews([]);
-        }
+        // Fetch reviews
+        const reviewsResponse = await reviewService.getReviewsByParkId(id);
+        setReviews(Array.isArray(reviewsResponse.data) ? reviewsResponse.data : []);
       } catch (err) {
         console.error('Error fetching data:', err);
-        setError(err.message);
+        setError(err.message || 'Failed to load park details');
       } finally {
         setLoading(false);
       }
@@ -85,7 +79,7 @@ const ParkDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex items-center space-x-2 text-green-600">
           <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -103,30 +97,32 @@ const ParkDetailPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-600 text-lg">Error: {error}</div>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+        <div className="text-red-600 text-lg mb-4">Error: {error}</div>
+        <Link to="/" className="btn btn-primary">
+          Return to Home
+        </Link>
       </div>
     );
   }
 
   if (!park) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600 text-lg">Park not found</div>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+        <div className="text-gray-600 text-lg mb-4">Park not found</div>
+        <Link to="/" className="btn btn-primary">
+          Return to Home
+        </Link>
       </div>
     );
   }
 
   const facilities = typeof park.facilities === 'string' ? JSON.parse(park.facilities) : park.facilities || [];
-
-  // Parse coordinates
   const [lat, lng] = park.coordinates.split(',').map((coord) => parseFloat(coord.trim()));
 
-  console.log('Current reviews state:', reviews); // Debug log
-
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-32 pb-8 px-4">
+      <div className="max-w-7xl mx-auto">
         <div className="mb-6">
           <Link to="/" className="inline-flex items-center text-green-600 hover:text-green-700">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -221,10 +217,7 @@ const ParkDetailPage = () => {
               </div>
 
               <div>
-                <h2 className="text-xl font-semibold flex items-center gap-2 text-green-700 mb-4">
-                  Facilities
-                  <DamageReportForm />
-                </h2>
+                <h2 className="text-xl font-semibold text-green-700 mb-4">Facilities</h2>
                 <div className="flex flex-wrap gap-2">
                   {facilities.map((facility, index) => (
                     <span
@@ -235,6 +228,30 @@ const ParkDetailPage = () => {
                     </span>
                   ))}
                 </div>
+                {user && (
+                  <div className="mt-4">
+                    <Link
+                      to="/report-damage"
+                      className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                      </svg>
+                      Found damaged facilities? Report Now
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -245,8 +262,8 @@ const ParkDetailPage = () => {
 
             <div className="mt-8">
               <h2 className="text-xl font-semibold text-green-700 mb-4">Location Map</h2>
-              <div className="h-[400px] rounded-lg overflow-hidden border-2 border-green-200">
-                <MapContainer center={[lat, lng]} zoom={15} style={{ height: '100%', width: '100%' }}>
+              <div className="h-[400px] rounded-lg overflow-hidden border-2 border-green-200 relative z-0">
+                <MapContainer center={[lat, lng]} zoom={15} style={{ height: '100%', width: '100%', zIndex: 0 }}>
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -263,8 +280,10 @@ const ParkDetailPage = () => {
 
             <div className="mt-8">
               <h2 className="text-xl font-semibold text-green-700 mb-4">Reviews ({reviews.length})</h2>
-              {Array.isArray(reviews) && reviews.length > 0 ? (
-                <div className="space-y-6">
+              {user && <ReviewForm parkId={id} onReviewAdded={(newReview) => setReviews([...reviews, newReview])} />}
+              
+              {reviews.length > 0 ? (
+                <div className="space-y-6 mt-6">
                   {reviews.map((review) => (
                     <div key={review.id} className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                       <div className="flex items-center justify-between mb-2">
@@ -282,16 +301,10 @@ const ParkDetailPage = () => {
                   ))}
                 </div>
               ) : (
-                <>
-                  <p className="text-gray-600 mb-4">No reviews yet</p>
-                  <ReviewForm />
-                </>
+                <p className="text-gray-600">No reviews yet. {!user && 'Sign in to be the first to review!'}</p>
               )}
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <p className="text-sm text-gray-500">Last updated: {new Date(park.updated_at).toLocaleDateString()}</p>
-            </div>
           </div>
         </div>
       </div>
