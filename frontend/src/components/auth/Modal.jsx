@@ -1,21 +1,50 @@
 import { useRef, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import Login from './Login';
 import Register from './Register';
 
 function Modal() {
   const [selectedTab, setSelectedTab] = useState('login');
   const modalRef = useRef(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   function openModal() {
     modalRef.current?.showModal();
   }
 
+  function closeModal() {
+    modalRef.current?.close();
+  }
+
+  const handleLoginSuccess = (userData) => {
+    closeModal();
+    // Redirect based on user role
+    if (userData.role === 'admin') {
+      navigate('/admin/dashboard');
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <>
-      <button className="btn rounded-full px-8" onClick={openModal}>
-        Sign In
-      </button>
+      {!user ? (
+        <button className="btn rounded-full px-8" onClick={openModal}>
+          Sign In
+        </button>
+      ) : (
+        <div className="flex items-center gap-2">
+          <span className="text-sm">{user.name}</span>
+          <button 
+            onClick={() => navigate(user.role === 'admin' ? '/admin/dashboard' : '/')}
+            className="btn btn-sm btn-ghost"
+          >
+            Dashboard
+          </button>
+        </div>
+      )}
 
       <dialog ref={modalRef} className="modal overflow-y-auto">
         <div className="modal-box max-h-max max-w-lg">
@@ -23,8 +52,19 @@ function Modal() {
             <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
           </form>
 
-          {selectedTab === 'login' && <Login setSelectedTab={setSelectedTab} />}
-          {selectedTab === 'register' && <Register setSelectedTab={setSelectedTab} />}
+          {selectedTab === 'login' && (
+            <Login 
+              setSelectedTab={setSelectedTab} 
+              onClose={closeModal}
+              onLoginSuccess={handleLoginSuccess}
+            />
+          )}
+          {selectedTab === 'register' && (
+            <Register 
+              setSelectedTab={setSelectedTab}
+              onClose={closeModal}
+            />
+          )}
 
           <a href="#" className="btn btn-ghost relative border border-base-300 mt-4 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 48 48" className="size-6">
