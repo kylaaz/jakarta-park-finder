@@ -1,21 +1,57 @@
 import api from './api';
 
-export const getReviewsByParkId = async (parkId) => {
-  try {
-    console.log('Fetching reviews for park:', parkId);
-    const response = await api.get(`/parks/${parkId}/reviews`);
-    console.log('Raw reviews response:', response);
-
-    if (response.data && response.data.status === 'success') {
-      const reviews = response.data.data;
-      console.log('Parsed reviews:', reviews);
-      return reviews;
+const reviewService = {
+  getReviewsByParkId: async (parkId) => {
+    try {
+      const response = await api.get(`/parks/${parkId}/reviews`);
+      return {
+        data: response.data.data || []
+      };
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      throw error;
     }
-    console.log('No reviews found or invalid response format');
-    return [];
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
-    console.error('Error details:', error.response?.data || error.message);
-    return [];
+  },
+
+  createReview: async (parkId, reviewData) => {
+    try {
+      const response = await api.post(`/parks/${parkId}/reviews`, reviewData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating review:', error);
+      throw error;
+    }
+  },
+
+  updateReview: async (reviewId, reviewData) => {
+    try {
+      const response = await api.put(`/reviews/${reviewId}`, reviewData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating review:', error);
+      throw error;
+    }
+  },
+
+  deleteReview: async (reviewId) => {
+    try {
+      const response = await api.delete(`/reviews/${reviewId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      throw error;
+    }
+  },
+
+  getUserReviews: async (userId) => {
+    try {
+      const response = await api.get(`/users/${userId}/reviews`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user reviews:', error);
+      throw error;
+    }
   }
 };
+
+export default reviewService;
