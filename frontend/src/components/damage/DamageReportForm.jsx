@@ -1,71 +1,161 @@
-import { useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAuth } from '../../context/AuthContext';
+import parkService from '../../services/parkService';
+import damagedParkService from '../../services/damagedParkService';
 
-export default function DamageReportForm() {
-  const modalRef = useRef(null);
+function DamageReportForm() {
+  const [parks, setParks] = useState([]);
+  const [selectedPark, setSelectedPark] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingParks, setLoadingParks] = useState(true);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  function openModal() {
-    modalRef.current?.showModal();
-  }
+  useEffect(() => {
+    const fetchParks = async () => {
+      try {
+        const response = await parkService.getAllParks();
+        setParks(response.data);
+      } catch (error) {
+        toast.error('Failed to load parks');
+        console.error('Error fetching parks:', error);
+      } finally {
+        setLoadingParks(false);
+      }
+    };
 
-  function onSubmit(e) {
+    fetchParks();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    modalRef.current?.close();
-    toast('Thanks for reporting!', { type: 'success' });
+    
+    if (!selectedPark) {
+      toast.error('Please select a park');
+      return;
+    }
+
+    if (!description.trim()) {
+      toast.error('Please provide a damage description');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await damagedParkService.createDamagedPark({
+        park_id: selectedPark,
+        damage_description: description,
+        images: image
+      });
+      
+      toast.success('Damage report submitted successfully');
+      navigate('/');
+    } catch (error) {
+      toast.error(error.message || 'Failed to submit damage report');
+      console.error('Error submitting report:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loadingParks) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
   }
 
   return (
-    <>
-      <button onClick={openModal} className="btn btn-square btn-error text-white btn-sm">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="size-5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
-          />
-        </svg>
-      </button>
-
-      <dialog ref={modalRef} className="modal overflow-y-auto">
-        <div className="modal-box text-base font-normal text-center text-base-content">
-          <form method="dialog">
-            <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
-          </form>
-
-          <h3 className="text-xl font-bold">Report</h3>
-          <p className="text-base-content/70 mt-2">Hello there, is there anything wrong with the facilities?</p>
-
-          <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-2">
-            <label className="form-control">
-              <div className="label">
-                <span className="label-text">Facility Name</span>
-              </div>
-              <input type="text" placeholder="Type here" className="input input-bordered" required />
-            </label>
-
-            <label className="form-control">
-              <div className="label">
-                <span className="label-text">Description</span>
-              </div>
-              <textarea className="textarea textarea-bordered" placeholder="Describe the damage" required></textarea>
-            </label>
-
-            <button type="submit" className="btn btn-primary mt-2">
-              Submit
-            </button>
-          </form>
+    <div className="max-w-2xl mx-auto p-8 pt-12">
+      <h2 className="text-2xl font-bold text-green-800 mb-8">Report Damaged Facility</h2>
+      
+      <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Park
+          </label>
+          <select
+            value={selectedPark}
+            onChange={(e) => setSelectedPark(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          >
+            <option value="">Select a park</option>
+            {parks.map((park) => (
+              <option key={park.id} value={park.id}>
+                {park.name}
+              </option>
+            ))}
+          </select>
         </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
-    </>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Damage Description
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows="4"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Please describe the damage in detail..."
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Upload Image (Optional)
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+
+        <div className="flex gap-4 mt-8">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`flex-1 bg-green-600 text-white py-3 px-6 rounded-xl text-lg font-semibold hover:bg-green-700 transition-all duration-200 ${
+              loading ? 'opacity-75 cursor-not-allowed' : ''
+            }`}
+          >
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Submitting...
+              </div>
+            ) : (
+              'Submit Report'
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
+
+export default DamageReportForm;
